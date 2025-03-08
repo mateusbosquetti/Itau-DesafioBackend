@@ -47,18 +47,8 @@ public class TransacaoService {
     public EstatisticaResponseDTO gerarEstatistica() {
         OffsetDateTime horarioAtual = OffsetDateTime.now();
         OffsetDateTime horario1minutosAtras = horarioAtual.minusSeconds(60);
-        List<Transacao> transacaoList = ajustarFusoHorarioParaBrasil(repository.findAll());
-        List<Transacao> transacoesValidas = new ArrayList<>();
-        for (Transacao transacao : transacaoList) {
-            if (
-                    transacao.getDataHora().getHour() == horario1minutosAtras.getHour() &&
-                            transacao.getDataHora().getMinute() > horario1minutosAtras.getMinute() ||
-                            transacao.getDataHora().getMinute() == horario1minutosAtras.getMinute() &&
-                                    transacao.getDataHora().getSecond() >= horario1minutosAtras.getSecond()
-            ) {
-                transacoesValidas.add(transacao);
-            }
-        }
+        List<Transacao> transacoesValidas = ajustarFusoHorarioParaBrasil(repository.findAll())
+                .stream().filter(transacao -> !transacao.getDataHora().isBefore(horario1minutosAtras)).toList();
 
         if (transacoesValidas.isEmpty()) {
             return new EstatisticaResponseDTO(

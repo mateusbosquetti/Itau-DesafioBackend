@@ -29,7 +29,6 @@ public class Transacao {
 
     public TransacaoResponseDTO toDto() {
         return new TransacaoResponseDTO(
-                this.id,
                 this.valor,
                 this.dataHora
         );

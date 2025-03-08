@@ -8,7 +8,6 @@ import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 public record TransacaoResponseDTO(
-        Integer id,
         BigDecimal valor,
         OffsetDateTime dataHora
 ) {
